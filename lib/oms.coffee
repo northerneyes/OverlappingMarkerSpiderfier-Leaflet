@@ -132,8 +132,12 @@ class @['OverlappingMarkerSpiderfier']
         @spiderfy(nearbyMarkerData, nonNearbyMarkers)
   
   p.makeHighlightListeners = (marker) ->
-    highlight:   => marker['_omsData'].leg.setStyle(color: @['legColors']['highlighted'])
-    unhighlight: => marker['_omsData'].leg.setStyle(color: @['legColors']['usual'])
+    highlight:   => 
+      marker['_omsData'].leg.setStyle(color: @['legColors']['highlighted'])
+      marker['_omsData'].circle.setStyle(color: @['legColors']['highlighted'])
+    unhighlight: =>
+     marker['_omsData'].leg.setStyle(color: @['legColors']['usual'])
+     marker['_omsData'].circle.setStyle(color: @['legColors']['usual'])
   
   p.spiderfy = (markerData, nonNearbyMarkers) ->
     @spiderfying = yes
