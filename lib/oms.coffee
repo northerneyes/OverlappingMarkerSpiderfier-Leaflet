@@ -25,7 +25,8 @@ class @['OverlappingMarkerSpiderfier']
   p['spiralFootSeparation'] = 28     # related to size of spiral (experiment!)
   p['spiralLengthStart'] = 11        # ditto
   p['spiralLengthFactor'] = 5        # ditto
-   
+  
+  p['legRadEnd'] = 3 
   p['legWeight'] = 1.5
   p['legColors'] =
     'usual': '#222'
@@ -151,8 +152,15 @@ class @['OverlappingMarkerSpiderfier']
         weight: @['legWeight']
         clickable: no
       }
+      circle = new L.circleMarker marker.getLatLng(), {
+            radius:  @['legRadEnd'],
+            color:  @['legColors']['usual'],
+            fillColor: 'white',
+            fillOpacity: 1
+        }
       @map.addLayer(leg)
-      marker['_omsData'] = {usualPosition: marker.getLatLng(), leg: leg}
+      @map.addLayer(circle)
+      marker['_omsData'] = {usualPosition: marker.getLatLng(), leg: leg, circle: circle}
       unless @['legColors']['highlighted'] is @['legColors']['usual']
         mhl = @makeHighlightListeners(marker)
         marker['_omsData'].highlightListeners = mhl
@@ -173,6 +181,7 @@ class @['OverlappingMarkerSpiderfier']
     for marker in @markers
       if marker['_omsData']?
         @map.removeLayer(marker['_omsData'].leg)
+        @map.removeLayer(marker['_omsData'].circle)
         marker.setLatLng(marker['_omsData'].usualPosition) unless marker is markerNotToMove
         marker.setZIndexOffset(0)
         mhl = marker['_omsData'].highlightListeners
